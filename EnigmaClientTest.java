@@ -19,73 +19,88 @@ public class EnigmaClientTest {
 	}
 
 	// custom setting methods
-	public static void customSetting(Enigma useEnigma, Scanner userInput) {
+	@SuppressWarnings("resource")
+	/**
+	 * Custom setting.
+	 * @param theEnigma Enigma class
+	 * @param theUserInput scanner input
+	 */
+	public static void customSetting(Enigma theEnigma, Scanner theUserInput) {
 		// Getting user's inner rotor and middle rotor, and message to encrypt or decrypt
 		System.out.print("Create your own inner rotor: ");
-		String userInnerRotor = userInput.next();
+		String userInnerRotor = theUserInput.next();
 		System.out.print("Create your own middle rotor: ");
-		String userMidRotor = userInput.next();
-		useEnigma =  new Enigma(userInnerRotor, userMidRotor);
+		String userMidRotor = theUserInput.next();
+		theEnigma =  new Enigma(userInnerRotor, userMidRotor);
 		System.out.println("What message do you want to encrypt?: ");
-		userInput = new Scanner(System.in); // restart scanner to read next line
-		String message  = userInput.nextLine();
-		System.out.println("Your encrypted message is: "+useEnigma.encrypt(message));
+		theUserInput = new Scanner(System.in); // restart scanner to read next line
+		String message  = theUserInput.nextLine();
+		System.out.println("Your encrypted message is: "+theEnigma.encrypt(message));
 		System.out.println();
-		useEnigma.reset();
+		theEnigma.reset();
 		
 	}
 	
 	// default setting methods
-	public static void defaultSetting(Enigma useEnigma, Scanner userInput) {
+	/**
+	 * Default setting.
+	 * @param theEnigma Enigma class
+	 * @param theUserInput scanner input
+	 */
+	public static void defaultSetting(Enigma theEnigma, Scanner theUserInput) {
 		 
-		String encryptedCode = useEnigma.encrypt(useEnigma.getMessage());// for default use only
-		useEnigma.reset();
+		String encryptedCode = theEnigma.encrypt(theEnigma.getMessage());// for default use only
+		theEnigma.reset();
 		System.out.println("Using default Settings");
 		System.out.println();
 		System.out.println("The Enigma model will use the following settings:");
-		System.out.println("\tOuter ring: "+ useEnigma.getOuterrotor());
-		System.out.println("\tMiddle ring: "+ useEnigma.getMiddleRotor());
-		System.out.println("\tInner ring: "+ useEnigma.getInnerRotor());
+		System.out.println("\tOuter ring: "+ theEnigma.getOuterrotor());
+		System.out.println("\tMiddle ring: "+ theEnigma.getMiddleRotor());
+		System.out.println("\tInner ring: "+ theEnigma.getInnerRotor());
 		System.out.println();
 		System.out.println("Would you like to:");
 		System.out.println("1. Encrypt");
 		System.out.println("2. Decrypt");
 		System.out.println("3. Run Default Example");
-		int option = userInput.nextInt();
+		int option = theUserInput.nextInt();
 		if (option == 1) {
-			System.out.println("You have chosen to encrypt the default string: "+ useEnigma.getMessage());
+			System.out.println("You have chosen to encrypt the default string: "+ theEnigma.getMessage());
 			System.out.println("The encrypted code is: "+ encryptedCode);
 			System.out.println();
-			useEnigma.reset();
+			theEnigma.reset();
 		}
 		else if(option==2) {
 			System.out.println("You have chosen to decrypt the default string: "+ encryptedCode);
-			System.out.println("The decrypted code is: "+useEnigma.decrypt(encryptedCode));
+			System.out.println("The decrypted code is: "+theEnigma.decrypt(encryptedCode));
 			System.out.println();
-			useEnigma.reset();
+			theEnigma.reset();
 		}
 		else {
-			System.out.println("You have chosen to use default setting: "+ useEnigma.getMessage());
+			System.out.println("You have chosen to use default setting: "+ theEnigma.getMessage());
 			System.out.println("The encrypted code is: "+ encryptedCode);
 			System.out.println("After encrypting, the rotors look like: ");
-			System.out.println("Outer Rotor: "+ useEnigma.getOuterrotor());
-			System.out.println("Middle Rotor: "+ useEnigma.getMiddleRotor());
-			System.out.println("Inner Rotor: "+ useEnigma.getInnerRotor());
-			useEnigma.reset();
+			System.out.println("Outer Rotor: "+ theEnigma.getOuterrotor());
+			System.out.println("Middle Rotor: "+ theEnigma.getMiddleRotor());
+			System.out.println("Inner Rotor: "+ theEnigma.getInnerRotor());
+			theEnigma.reset();
 			System.out.println();
 			System.out.println("The default encrypted code is:  "+ encryptedCode);
-			System.out.println("The decrypted code is: "+useEnigma.decrypt(encryptedCode));
+			System.out.println("The decrypted code is: "+theEnigma.decrypt(encryptedCode));
 			System.out.println("After decrypting, the rotors look like: ");
-			System.out.println("Outer Rotor: "+ useEnigma.getOuterrotor());
-			System.out.println("Middle Rotor: "+ useEnigma.getMiddleRotor());
-			System.out.println("Inner Rotor: "+ useEnigma.getInnerRotor());
+			System.out.println("Outer Rotor: "+ theEnigma.getOuterrotor());
+			System.out.println("Middle Rotor: "+ theEnigma.getMiddleRotor());
+			System.out.println("Inner Rotor: "+ theEnigma.getInnerRotor());
 			System.out.println();
-			useEnigma.reset();
+			theEnigma.reset();
 		}
 		
 	}
 	
-	// instruction for users and users' choice on running the program
+	/**
+	 * Instruction for users and users' choice on running the program
+	 * @param userInput
+	 * @return
+	 */
 	public static int instruction(Scanner userInput) {
 		
 		System.out.println("Welcome to Enigma!");

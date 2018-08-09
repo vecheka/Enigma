@@ -1,61 +1,84 @@
-import javax.xml.stream.events.EndDocument;
+
 
 public class Enigma {
 
+	/** Default Outer Rotor use to encryt and decrypt the message.*/
 	public static final String outerRotor = "#BDFHJLNPRTVXZACEGIKMOQSUWY"; 
-	private static String innerRotor ="#GNUAHOVBIPWCJQXDKRYELSZFMT";
-	private static String middleRotor = "#EJOTYCHMRWAFKPUZDINSXBGLQV";
+	/** Default Inner Rotor use to encryt and decrypt the message.*/
+	private  String innerRotor ="#GNUAHOVBIPWCJQXDKRYELSZFMT";
+	/** Default Middle Rotor use to encryt and decrypt the message.*/
+	private  String middleRotor = "#EJOTYCHMRWAFKPUZDINSXBGLQV";
+	/** Default message for testing.*/
 	public static final String message = "Computer programming is lots of fun";
+	/** Count of rotations on each rotor.*/
 	public static int count = 0; // keep track of rotation to turn middle rotor
 	
+	/**
+	 * Default Constructor.
+	 */
 	public Enigma(){
 		//default constructor - constructs enigma machine as shown in spec
 		
 	}
 	
-	public Enigma(String s1, String s2){
+	/**
+	 * Constructor that takes custom inner rotor, and middle rotor.
+	 * @param theInnerRotor inner rotor
+	 * @param theMiddleRotor middle rotor
+	 */
+	public Enigma(final String theInnerRotor, final String theMiddleRotor){
 		//non-default constructor - constructs machine with user specified inner and middle rotors
 		//non-default constructor should call method(s) to make sure rotors meet requirements
-		this.innerRotor = s1;
-		this.middleRotor = s2;
+		this.innerRotor = theInnerRotor;
+		this.middleRotor = theMiddleRotor;
 		
 	}
 	
-	private boolean isRotorValid (String rotStr){
+	/**
+	 * Verify if the given rotor is valid.
+	 * @param theRotor rotor to be verified
+	 * @return true if it is valid
+	 */
+	private boolean isRotorValid (final String theRotor){
 		//verify that rotStr is exactly 27 chars long 
 		//verify that all chars from english alphbet occur only once 
 		//verify that rotor starts with a # char
-		if(rotStr.length()==27 && rotStr.charAt(0)== '#') {
+		if(theRotor.length() == outerRotor.length() && theRotor.charAt(0) == outerRotor.charAt(0)) {
 			return true;
 		}
 		// count occurences
 		int countOccur = 0;
-		for (char ch='A'; ch<'Z'; ch++) {
-			for (int i=0; i<rotStr.length();i++) {
-				if(ch==rotStr.charAt(i)) {
+		for (char ch = 'A'; ch < 'Z'; ch++) {
+			for (int i = 0; i < theRotor.length(); i++) {
+				if(ch == theRotor.charAt(i)) {
 					countOccur++;
 				}
 			}
-			if(countOccur>=2) {
+			if(countOccur >= 2) {
 				return false;
 			}
-			countOccur=0;
+			countOccur = 0;
 		}
 		
 		return true;
 		
 	} 
 	
-	public String encrypt (String message){
+	/**
+	 * Encrypt the given message.
+	 * @param theMessage message to be encrypted
+	 * @return an encrypted message
+	 */
+	public String encrypt (String theMessage){
 		//call to encodeChar  (Inner-Outer-Middle-Outer)
 		//call to rotateClockwise
 		String encodedMessage = "";
-		message =  message.replace(" ", "#").toUpperCase();
+		theMessage =  theMessage.replace(" ", "#").toUpperCase();
 		if(isRotorValid(innerRotor) && isRotorValid(middleRotor) 
 				&& isRotorValid(outerRotor)) {
-			int i =0;
-			while(i<message.length()) {
-				char ch =  message.charAt(i);
+			int i = 0;
+			while(i < theMessage.length()) {
+				char ch =  theMessage.charAt(i);
 				encodedMessage += encodeChar(ch);
 				rotateClockwise();
 				count++;
@@ -71,17 +94,21 @@ public class Enigma {
 	
 	
 	
-
-	public String decrypt (String message){ 
+	/**
+	 * Decrypt the given message.
+	 * @param theMessage message to be encrypted
+	 * @return an decrypted message
+	 */
+	public String decrypt (String theMessage){ 
 		//call to rotateAntiClockwise
 		//call to decodeChar (Outer-Middle-Outer-Inner)
 		String decodedMessage = "";
-		message = message.toUpperCase();
+		theMessage = theMessage.toUpperCase();
 		if(isRotorValid(innerRotor) && isRotorValid(middleRotor) 
 				&& isRotorValid(outerRotor)) {
 			int i = 0;
-			while(i<message.length()) {
-				char ch = message.charAt(i);
+			while(i<theMessage.length()) {
+				char ch = theMessage.charAt(i);
 				decodedMessage += decodeChar(ch);
 				rotateClockwise();
 				count++;
@@ -92,10 +119,15 @@ public class Enigma {
 		return decodedMessage ;
 	} 
 	
-	private char encodeChar (char ch){
+	/**
+	 * Helper method to encode a given character.
+	 * @param theChar character to be encoded
+	 * @return an encoded character
+	 */
+	private char encodeChar (final char theChar){
 		//this finds the code character for ch (as per spec)
 		char code = '\0'; // null char 
-		int inner = innerRotor.indexOf(ch);
+		int inner = innerRotor.indexOf(theChar);
 		char outer = outerRotor.charAt(inner);
 		int middle = middleRotor.indexOf(outer);
 		code = outerRotor.charAt(middle);
@@ -103,20 +135,28 @@ public class Enigma {
 		return code;
 	} 
 	
-	private char decodeChar (char ch){
+	/**
+	 * Helper method to decode a given character.
+	 * @param theChar character to be encoded
+	 * @return an decoded character
+	 */
+	private char decodeChar (final char theChar){
 		//this finds the original character for the code ch (as per spec)
 		char message = '\0';
-		int outer = outerRotor.indexOf(ch);
+		int outer = outerRotor.indexOf(theChar);
 		char middle = middleRotor.charAt(outer);
 		int inner = outerRotor.indexOf(middle);
 		message = innerRotor.charAt(inner);
-		if(message=='#') {
+		if(message == '#') {
 			message = ' ';
 		}
 		
 		return message;
 	} 
 	
+	/**
+	 * Helper method to rotate the inner rotor clock wise.
+	 */
 	private void rotateClockwise(){ 
 		String lastCha = ""+innerRotor.charAt(innerRotor.length()-1);
 		for(int i=0; i<innerRotor.length()-1; i++) {
@@ -140,6 +180,9 @@ public class Enigma {
 //		
 //	} 
 	
+	/**
+	 * Reset the innerRotor and middleRotor back to the default.
+	 */
 	public void reset (){
 		//resets to align all # chars on all rotors (returns rotors to initial configuration)
 		innerRotor ="#GNUAHOVBIPWCJQXDKRYELSZFMT";
@@ -149,33 +192,54 @@ public class Enigma {
 	}
 	
 	
-	
-	public static String getInnerRotor() {
+	/**
+	 * Get innerRotor.
+	 * @return innerRotor
+	 */
+	public  String getInnerRotor() {
 		return innerRotor;
 	}
-	public static void setInnerRotor(String innerRotor) {
-		Enigma.innerRotor = innerRotor;
+	
+	/**
+	 * Set the innerRotor to a given innerRotor.
+	 * @param theInnerRotor innerRotor to be used
+	 */
+	public void setInnerRotor(final String theInnerRotor) {
+		this.innerRotor = theInnerRotor;
 	}
-	public static String getMiddleRotor() {
+	
+	/**
+	 * Get the middleRotor
+	 * @return middleRotor
+	 */
+	public String getMiddleRotor() {
 		return middleRotor;
 	}
-	public static void setMiddleRotor(String middleRotor) {
-		Enigma.middleRotor = middleRotor;
+	
+	/**
+	 * Set the middleRotor to a given middleRotor
+	 * @param theMiddleRotor middleRotor to be used
+	 */
+	public void setMiddleRotor(final String theMiddleRotor) {
+		this.middleRotor = theMiddleRotor;
 	}
-	public static String getOuterrotor() {
+	
+	/**
+	 * Get the outerRotor
+	 * @return outerRotor
+	 */
+	public String getOuterrotor() {
 		return outerRotor;
 	}
-	public static int getCount() {
-		return count;
-	}
-
-	public static void setCount(int count) {
-		Enigma.count = count;
-	}
-
-	public static String getMessage() {
+	
+	
+	/**
+	 * Get the message being encrypted.
+	 * @return message
+	 */
+	public String getMessage() {
 		return message;
-}
+	}
 	}
 
 

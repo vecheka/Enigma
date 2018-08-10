@@ -64,15 +64,17 @@ public class EnigmaClientTest {
 		System.out.println("3. Run Default Example");
 		int option = theUserInput.nextInt();
 		if (option == 1) {
-			System.out.println("You have chosen to encrypt the default string: "+ theEnigma.getMessage());
-			System.out.println("The encrypted code is: "+ encryptedCode);
-			System.out.println();
+			System.out.print("Type your message: ");
+			theUserInput = new Scanner(System.in);
+			final String message = theUserInput.nextLine();
+			System.out.println("Your encrypted message is: " + theEnigma.encrypt(message));
 			theEnigma.reset();
 		}
-		else if(option==2) {
-			System.out.println("You have chosen to decrypt the default string: "+ encryptedCode);
-			System.out.println("The decrypted code is: "+theEnigma.decrypt(encryptedCode));
-			System.out.println();
+		else if(option == 2) {
+			System.out.print("Type your message: ");
+			theUserInput = new Scanner(System.in);
+			final String message = theUserInput.nextLine();
+			System.out.println("Your encrypted message is: " + theEnigma.decrypt(message));
 			theEnigma.reset();
 		}
 		else {
